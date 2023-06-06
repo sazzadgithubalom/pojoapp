@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration status="debug">
+	<Properties>
+		<Property name="LOG_DIR">/usr/local/pojoapp/</Property>
+		<Property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss,SSS} : %X{log-trace-id} : %-6p : %F:%L : %m%n</Property>
+	</Properties>
+
+	<Appenders>
+		<Console name="LogToConsole" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN}" />
+		</Console>
+
+		<RollingFile name="LogToFile"
+			fileName="${LOG_DIR}/api.log"
+			filePattern="${LOG_DIR}/$${date:yyyy-MM}/notifyproapp-%d{MM-dd-yyyy}.log.gz"
+			ignoreExceptions="false">
+
+			<PatternLayout>
+				<Pattern>${PATTERN}</Pattern>
+			</PatternLayout>
+
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" />
+			</Policies>
+			<DefaultRolloverStrategy max="5" />
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+		<Logger name="com.mosambee" level="debug" additivity="false" includeLocation="true">
+			<AppenderRef ref="LogToFile" />
+			<AppenderRef ref="LogToConsole" />
+		</Logger>
+
+		<Root level="info" includeLocation="true">
+			<AppenderRef ref="LogToFile" />
+			<AppenderRef ref="LogToConsole" />
+		</Root>
+	</Loggers>
+</Configuration>
